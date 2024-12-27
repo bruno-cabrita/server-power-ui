@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, sans-serif;
+}
+
+.machine-holder {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.machine-card {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  width: 100%;
+  max-width: 240px;
+}
