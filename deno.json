@@ -1,10 +1,14 @@
 {
   "tasks": {
-    "dev": "deno run -NRE --unstable-net --allow-run --allow-sys --watch src/server.tsx"
+    "init": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.0-beta.1/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss",
+    "tailwind:prod": "./tailwindcss --optimize -m -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
+    "tailwind:dev": "./tailwindcss -w -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
+    "dev": "deno task tailwind:dev & deno run -NRE --unstable-net --allow-run --allow-sys --watch src/server.tsx",
+    "prod": "deno task tailwind:prod && deno run -NRE --unstable-net --allow-run --allow-sys src/server.tsx"
   },
   "imports": {
-    "@std/fs": "jsr:@std/fs@^1.0.8",
     "~/": "./src/",
+    "@std/fs": "jsr:@std/fs@^1.0.8",
     "wol": "jsr:@bukhalo/wol@^2.0.1",
     "dax": "jsr:@david/dax@^0.42.0",
     "hono": "jsr:@hono/hono@^4.6.14",

@@ -12,6 +12,9 @@ app.get("/*", serveStatic({ root: "./src/public/" }));
 
 app.get("/", (c) => c.html(<Home machines={machineData} />));
 
+/*
+ * POWER ON
+ */
 app.post("/power-on/:id", async (c) => {
   const { id } = c.req.param();
 
@@ -26,6 +29,9 @@ app.post("/power-on/:id", async (c) => {
   return c.redirect("/");
 });
 
+/*
+ * POWER OFF
+ */
 app.post("/power-off/:id", async (c) => {
   const { id } = c.req.param();
 
@@ -36,14 +42,17 @@ app.post("/power-off/:id", async (c) => {
   console.log("[ INFO ] Powering off:", machine.id);
 
   const result = await $`${cmds.poweroff(machine)}`
-    .stdout("piped")
-    .stderr("piped");
+    .quiet("stderr")
+    .stdout("piped");
+
   console.log("[ INFO ] stdout:", result.stdout);
-  console.log("[ INFO ] stderr:", result.stderr);
 
   return c.redirect("/");
 });
 
+/*
+ * PING
+ */
 app.post("/ping/:id", async (c) => {
   const { id } = c.req.param();
 
@@ -53,9 +62,7 @@ app.post("/ping/:id", async (c) => {
 
   console.log("[ INFO ] Pinging:", machine.id);
 
-  const result = await $`${cmds.ping(machine)}`
-    .quiet("stderr")
-    .stdout("piped");
+  const result = await $`${cmds.ping(machine)}`.quiet("stderr").stdout("piped");
 
   console.log("[ INFO ] stdout:", result.stdout);
 

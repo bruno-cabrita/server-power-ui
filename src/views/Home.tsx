@@ -6,11 +6,7 @@ import MachineCard from "~/components/MachineCard.tsx";
 const Home: FC<{ machines: Machine[] }> = (props: { machines: Machine[] }) => {
   return (
     <BaseLayout>
-      <h1>HomePage</h1>
-      <a href="/">
-        <button>Reload</button>
-      </a>
-      <div class="machine-holder">
+      <div class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {props.machines.map((machine) => {
           return <MachineCard machine={machine} />;
         })}
