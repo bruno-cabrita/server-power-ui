@@ -5,7 +5,9 @@
     "tailwind:prod": "./tailwindcss --optimize -m -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "tailwind:dev": "./tailwindcss -w -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "dev": "deno task tailwind:dev & deno run -NRE --unstable-net --allow-run --allow-sys --watch src/server.tsx",
-    "prod": "deno task tailwind:prod && deno run -NRE --unstable-net --allow-run --allow-sys src/server.tsx"
+    "build": "deno task format && deno task tailwind:prod",
+    "preview": "deno task build && deno run -NRE --unstable-net --allow-run --allow-sys src/server.tsx",
+    "serve": "deno run -NRE --unstable-net --allow-run --allow-sys src/server.tsx"
   },
   "imports": {
     "~/": "./src/",

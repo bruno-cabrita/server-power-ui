@@ -1,0 +1,9 @@
+.DS_Store
+.git
+.gitignore
+.dockerignore
+Dockerfile*
+docker-compose*
+README.md
+data/
+tailwindcss

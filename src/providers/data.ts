@@ -10,6 +10,7 @@ const dataFileOk = await exists(dataFilePath, {
 
 if (!dataFileOk) {
   console.log("[ ERROR ] Data file not found!");
+  await Deno.writeTextFile("data/data.json", "{}");
   Deno.exit();
 }
 

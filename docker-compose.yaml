@@ -1,0 +1,14 @@
+services:
+  app:
+    container_name: server-power-ui
+    image: server-power-ui:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - data:/app/data
+
+volumes:
+  data:
