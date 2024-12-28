@@ -1,7 +1,7 @@
-import { exists } from "@std/fs";
+import { exists } from "fs";
 import { MachineSchema } from "~/schemas.ts";
 
-const dataFilePath = "./data/machines.json";
+const dataFilePath = "./data/data.json";
 
 const dataFileOk = await exists(dataFilePath, {
   isReadable: true,
@@ -13,9 +13,9 @@ if (!dataFileOk) {
   Deno.exit();
 }
 
-const { success, data } = MachineSchema.array().safeParse(JSON.parse(
-  await Deno.readTextFile(dataFilePath),
-));
+const { success, data } = MachineSchema.array().safeParse(
+  JSON.parse(await Deno.readTextFile(dataFilePath)),
+);
 
 if (!success) {
   console.log("[ ERROR ] Invalid data file format!");
