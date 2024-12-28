@@ -4,10 +4,10 @@
     "format": "deno lint && deno fmt",
     "tailwind:prod": "./tailwindcss --optimize -m -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "tailwind:dev": "./tailwindcss -w -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
-    "dev": "deno task tailwind:dev & deno run -NRE --unstable-net --allow-run --allow-sys --watch src/server.tsx",
+    "dev": "deno task tailwind:dev & deno run -RNEWS --unstable-net --allow-run --watch src/server.tsx",
     "build": "deno task format && deno task tailwind:prod",
-    "preview": "deno task build && deno run -NRE --unstable-net --allow-run --allow-sys src/server.tsx",
-    "serve": "deno run -NRE --unstable-net --allow-run --allow-sys src/server.tsx"
+    "serve": "deno run -RNEWS --unstable-net --allow-run src/server.tsx",
+    "preview": "deno task build && deno task serve"
   },
   "imports": {
     "~/": "./src/",
