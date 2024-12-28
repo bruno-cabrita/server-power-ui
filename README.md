@@ -21,12 +21,13 @@ Create `data/data.json` file with the following format.
 
 ## Commands
 
-| Description    | Commands           |
-| :------------- | :----------------- |
-| Initialization | `deno task init`   |
-| Lint + Format  | `deno task format` |
-| Development    | `deno taks dev`    |
-| Production     | `deno task prod`   |
+| Description    | Commands            |
+| :------------- | :------------------ |
+| Initialization | `deno task init`    |
+| Development    | `deno taks dev`     |
+| Lint + Format  | `deno task format`  |
+| Build          | `deno task build`   |
+| Preview        | `deno task preview` |
 
 ## Docker
 

@@ -1,6 +1,6 @@
 import $ from "dax";
 import { wake } from "wol";
-import { Hono, type Context } from "hono";
+import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { cmds } from "~/providers/commands.ts";
 import machineData from "~/providers/data.ts";
@@ -43,11 +43,9 @@ app.post("/power-off/:id", async (c) => {
 
   console.log("[ INFO ] Powering off:", machine.id);
 
-  const result = await $`${cmds.poweroff(machine)}`
-    .quiet("stderr")
-    .stdout("piped");
+  const result = await $`${cmds.poweroff(machine)}`.text("stdout");
 
-  console.log("[ INFO ] stdout:", result.stdout);
+  console.log("[ INFO ] stdout:", result);
 
   return c.redirect("/");
 });
@@ -64,11 +62,11 @@ app.post("/ping/:id", async (c) => {
 
   console.log("[ INFO ] Pinging:", machine.id);
 
-  const result = await $`${cmds.ping(machine)}`.quiet("stderr").stdout("piped");
+  const result = await $`${cmds.ping(machine)}`.text("stdout");
 
-  console.log("[ INFO ] stdout:", result.stdout);
+  console.log("[ INFO ] stdout:", result);
 
   return c.redirect("/");
 });
 
-Deno.serve(app.fetch);
+Deno.serve({ port: 8020 }, app.fetch);

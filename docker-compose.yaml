@@ -1,14 +1,13 @@
 services:
   app:
     container_name: server-power-ui
-    image: server-power-ui:latest
+    restart: "unless-stopped"
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
     volumes:
       - data:/app/data
+    network_mode: "host"
 
 volumes:
   data:

@@ -1,10 +1,9 @@
 FROM denoland/deno:debian
 WORKDIR /app
 
+EXPOSE 8020
+
 COPY . .
 RUN deno cache src/server.tsx
-
-#USER deno
-EXPOSE 8000
 
 ENTRYPOINT [ "deno", "task", "serve" ]
