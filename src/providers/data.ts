@@ -10,8 +10,7 @@ const dataFileOk = await exists(dataFilePath, {
 
 if (!dataFileOk) {
   console.log("[ ERROR ] Data file not found!");
-  await Deno.writeTextFile("data/data.json", "{}");
-  Deno.exit();
+  await Deno.writeTextFile("data/data.json", "[]");
 }
 
 const { success, data } = MachineSchema.array().safeParse(
@@ -20,12 +19,10 @@ const { success, data } = MachineSchema.array().safeParse(
 
 if (!success) {
   console.log("[ ERROR ] Invalid data file format!");
-  Deno.exit();
 }
 
 if (data.length <= 0) {
   console.log("[ ERROR ] No data!");
-  Deno.exit();
 }
 
 console.log("[  OK  ] Data file ok.");

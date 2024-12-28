@@ -1,16 +1,18 @@
-import { Hono } from "hono";
-import { serveStatic } from "hono/deno";
-import Home from "~/views/Home.tsx";
-import machineData from "~/providers/data.ts";
-import { wake } from "wol";
 import $ from "dax";
+import { wake } from "wol";
+import { Hono, type Context } from "hono";
+import { serveStatic } from "hono/deno";
 import { cmds } from "~/providers/commands.ts";
+import machineData from "~/providers/data.ts";
+import AddServer from "~/views/AddServer.tsx";
+import Home from "~/views/Home.tsx";
 
 const app = new Hono();
 
 app.get("/*", serveStatic({ root: "./src/public/" }));
 
-app.get("/", (c) => c.html(<Home machines={machineData} />));
+app.get("/", (c: Context) => c.html(<Home machines={machineData} />));
+app.get("/add-server", (c: Context) => c.html(<AddServer />));
 
 /*
  * POWER ON

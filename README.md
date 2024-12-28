@@ -16,7 +16,6 @@ Create `data/data.json` file with the following format.
     "user": "root",
     "password": "secret"
   }
-  // ...
 ]
 ```
 
