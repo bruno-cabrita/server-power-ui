@@ -1,10 +1,11 @@
-```bash
-# Initialization
-deno task init
+# Server Power
 
-# Development
-deno taks dev
+A web ui to control local server power with Wake-On-Lan and SSH.
 
-# Production
-deno task prod
-```
+## Commands
+
+| Description    | Commands        |
+|:-------------- |:--------------- |
+| Initialization |`deno task init` |
+| Development    |`deno taks dev`  |
+| Production     |`deno task prod` |
