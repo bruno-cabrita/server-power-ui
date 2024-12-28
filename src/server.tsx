@@ -3,6 +3,8 @@ import { serveStatic } from "hono/deno";
 import Home from "~/views/Home.tsx";
 import machineData from "~/providers/data.ts";
 import { wake } from "wol";
+import $ from "dax";
+import { cmds } from "~/providers/commands.ts";
 
 const app = new Hono();
 
@@ -15,13 +17,49 @@ app.post("/power-on/:id", async (c) => {
 
   const machine = machineData?.find((item) => item.id == id);
 
-  if(!machine) return c.notFound();
+  if (!machine) return c.notFound();
+
+  console.log("[ INFO ] Powering on:", machine.id);
 
   await wake(machine.mac);
 
   return c.redirect("/");
-
 });
 
+app.post("/power-off/:id", async (c) => {
+  const { id } = c.req.param();
+
+  const machine = machineData?.find((item) => item.id == id);
+
+  if (!machine) return c.notFound();
+
+  console.log("[ INFO ] Powering off:", machine.id);
+
+  const result = await $`${cmds.poweroff(machine)}`
+    .stdout("piped")
+    .stderr("piped");
+  console.log("[ INFO ] stdout:", result.stdout);
+  console.log("[ INFO ] stderr:", result.stderr);
+
+  return c.redirect("/");
+});
+
+app.post("/ping/:id", async (c) => {
+  const { id } = c.req.param();
+
+  const machine = machineData?.find((item) => item.id == id);
+
+  if (!machine) return c.notFound();
+
+  console.log("[ INFO ] Pinging:", machine.id);
+
+  const result = await $`${cmds.ping(machine)}`
+    .quiet("stderr")
+    .stdout("piped");
+
+  console.log("[ INFO ] stdout:", result.stdout);
+
+  return c.redirect("/");
+});
 
 Deno.serve(app.fetch);

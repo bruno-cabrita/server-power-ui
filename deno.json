@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run -NR --unstable-net --allow-sys --watch src/server.tsx"
+    "dev": "deno run -NRE --unstable-net --allow-run --allow-sys --watch src/server.tsx"
   },
   "imports": {
     "@std/fs": "jsr:@std/fs@^1.0.8",

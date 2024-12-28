@@ -7,6 +7,9 @@ const Home: FC<{ machines: Machine[] }> = (props: { machines: Machine[] }) => {
   return (
     <BaseLayout>
       <h1>HomePage</h1>
+      <a href="/">
+        <button>Reload</button>
+      </a>
       <div class="machine-holder">
         {props.machines.map((machine) => {
           return <MachineCard machine={machine} />;
