@@ -23,18 +23,16 @@ async function useData() {
     console.log("[ ERROR ] Invalid data file format!");
   }
 
-  if (data!.length <= 0) {
-    console.log("[ WARN ] No data!");
-  }
+  const servers = !success || !data ? [] : data;
 
-  console.log("[  OK  ] Servers data file ok.");
-
-  function addServer(server: Server) {
-    console.log("TODO: addServer()", server);
+  async function addServer(server: Server) {
+    console.log("addServer()", server);
+    servers.push(server);
+    await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
   }
 
   return {
-    servers: data,
+    servers,
     addServer,
   };
 }

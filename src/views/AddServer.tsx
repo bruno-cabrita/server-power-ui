@@ -29,7 +29,7 @@ const View: FC = () => {
             id="name"
             name="name"
             type="text"
-            value="Example Server"
+            placeholder="Example Server"
             class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
           />
           <label
@@ -43,7 +43,7 @@ const View: FC = () => {
             id="mac"
             name="mac"
             type="text"
-            value="00:00:00:00:00:00"
+            placeholder="00:00:00:00:00:00"
             pattern="^[0-9a-fA-F]{1,2}(:[0-9a-fA-F]{1,2}){5}$"
             class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
           />
@@ -58,7 +58,7 @@ const View: FC = () => {
             id="ip"
             name="ip"
             type="text"
-            value="10.0.0.100"
+            placeholder="10.0.0.100"
             minlength={7}
             maxlength={15}
             size={15}
@@ -76,7 +76,7 @@ const View: FC = () => {
             id="user"
             name="user"
             type="text"
-            value="root"
+            placeholder="root"
             class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
           />
           <label
@@ -90,7 +90,7 @@ const View: FC = () => {
             id="password"
             name="password"
             type="password"
-            value="secret"
+            placeholder="secret"
             class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
           />
           <div class="col-span-2 flex flex-row justify-center mt-4">

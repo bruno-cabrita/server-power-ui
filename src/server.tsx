@@ -33,7 +33,7 @@ app.post("/add-server", async (c: Context) => {
     return c.redirect("/add-server?form-error");
   }
 
-  addServer(data);
+  await addServer(data);
 
   return c.redirect("/");
 });
