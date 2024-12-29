@@ -31,9 +31,13 @@ async function useData() {
   }
 
   async function updateServer(server: Server) {
-    console.log("updateServer()", server);
-    // servers.push(server);
-    // await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
+    const serverIdx = servers.findIndex(
+      (item: Server) => item.id === server.id,
+    );
+
+    servers[serverIdx] = server;
+
+    await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
   }
 
   return {
