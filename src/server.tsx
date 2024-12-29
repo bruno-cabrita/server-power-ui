@@ -7,19 +7,29 @@ import { Server } from "~/types.ts";
 import { cmds } from "~/providers/commands.ts";
 import { useData } from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
+import EditServer from "~/views/EditServer.tsx";
 import Home from "~/views/Home.tsx";
 
-const { addServer, servers } = await useData();
+const { addServer, updateServer, servers } = await useData();
 
 const app = new Hono();
 
 app.get("/*", serveStatic({ root: "./src/public/" }));
 
 app.get("/", (c: Context) => c.html(<Home servers={servers!} />));
+
 app.get("/add-server", (c: Context) => c.html(<AddServer />));
 
+app.get("/edit-server/:id", (c: Context) => {
+  const { id } = c.req.param();
+  const server = servers?.find((item: Server) => item.id == id);
+  if (!server) return c.notFound();
+
+  return c.html(<EditServer server={server} />);
+});
+
 /*
- * ADD Server
+ * Add Server
  */
 app.post("/add-server", async (c: Context) => {
   const form = await c.req.formData();
@@ -37,7 +47,30 @@ app.post("/add-server", async (c: Context) => {
 
   return c.redirect("/");
 });
-``;
+
+/*
+ * Update Server
+ */
+app.post("/edit-server/:id", async (c: Context) => {
+  const { id } = c.req.param();
+  const server = servers?.find((item: Server) => item.id == id);
+  if (!server) return c.notFound();
+
+  const form = await c.req.formData();
+  const formObj: Record<string, string> = {};
+  form.forEach((value, key: string) => (formObj[key] = value as string));
+
+  server.name = formObj.name;
+  server.ip = formObj.ip;
+  server.mac = formObj.mac;
+  server.user = formObj.user;
+  server.password ||= formObj.password;
+
+  await updateServer(server);
+
+  return c.redirect("/");
+});
+
 /*
  * POWER ON
  */
@@ -93,4 +126,4 @@ app.post("/ping/:id", async (c: Context) => {
   return c.redirect("/");
 });
 
-Deno.serve({ port: 8020 }, app.fetch);
+Deno.serve({ port: 4000 }, app.fetch);

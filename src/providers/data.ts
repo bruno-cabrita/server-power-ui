@@ -26,14 +26,20 @@ async function useData() {
   const servers = !success || !data ? [] : data;
 
   async function addServer(server: Server) {
-    console.log("addServer()", server);
     servers.push(server);
     await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
+  }
+
+  async function updateServer(server: Server) {
+    console.log("updateServer()", server);
+    // servers.push(server);
+    // await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
   }
 
   return {
     servers,
     addServer,
+    updateServer,
   };
 }
 

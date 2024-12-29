@@ -1,7 +1,7 @@
 FROM denoland/deno:debian
 WORKDIR /app
 
-EXPOSE 8020
+EXPOSE 4000
 
 COPY . .
 RUN deno cache src/server.tsx
