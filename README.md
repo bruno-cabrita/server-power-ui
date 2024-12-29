@@ -2,7 +2,6 @@
 
 A Web UI to control local servers power with Wake-On-Lan and SSH.
 
-
 ## Commands
 
 | Description    | Commands            |

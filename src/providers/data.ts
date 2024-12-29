@@ -15,8 +15,10 @@ async function useData() {
     await Deno.writeTextFile(dataFilePath, "[]");
   }
 
+  const fileText = await Deno.readTextFile(dataFilePath);
+
   const { success, data } = ServerSchema.array().safeParse(
-    JSON.parse(await Deno.readTextFile(dataFilePath)),
+    JSON.parse(fileText),
   );
 
   if (!success || !data) {
@@ -25,9 +27,16 @@ async function useData() {
 
   const servers = !success || !data ? [] : data;
 
+  async function writeServersDataFile(servers: Server[]) {
+    return await Deno.writeTextFile(
+      dataFilePath,
+      JSON.stringify(servers, null, "  "),
+    );
+  }
+
   async function addServer(server: Server) {
     servers.push(server);
-    await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
+    await writeServersDataFile(servers);
   }
 
   async function updateServer(server: Server) {
@@ -37,7 +46,7 @@ async function useData() {
 
     servers[serverIdx] = server;
 
-    await Deno.writeTextFile(dataFilePath, JSON.stringify(servers, null, "  "));
+    await writeServersDataFile(servers);
   }
 
   return {

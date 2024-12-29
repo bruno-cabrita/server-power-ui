@@ -1,10 +1,8 @@
-import $ from "dax";
-import { wake } from "wol";
 import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { ServerSchema } from "~/schemas.ts";
 import { Server } from "~/types.ts";
-import { cmds } from "~/providers/commands.ts";
+import { useCommands } from "~/providers/commands.ts";
 import { useData } from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
 import EditServer from "~/views/EditServer.tsx";
@@ -83,7 +81,8 @@ app.post("/power-on/:id", async (c: Context) => {
 
   console.log("[ INFO ] Powering on:", server.id);
 
-  await wake(server.mac);
+  const { poweron } = useCommands(server);
+  await poweron();
 
   return c.redirect("/");
 });
@@ -100,9 +99,10 @@ app.post("/power-off/:id", async (c: Context) => {
 
   console.log("[ INFO ] Powering off:", server.id);
 
-  const result = await $`${cmds.poweroff(server)}`.text("stdout");
+  const { poweroff } = useCommands(server);
+  const res = await poweroff();
 
-  console.log("[ INFO ] stdout:", result);
+  console.log("[ INFO ] stdout:", res);
 
   return c.redirect("/");
 });
@@ -119,9 +119,10 @@ app.post("/ping/:id", async (c: Context) => {
 
   console.log("[ INFO ] Pinging:", server.id);
 
-  const result = await $`${cmds.ping(server)}`.text("stdout");
+  const { ping } = useCommands(server);
+  const res = await ping();
 
-  console.log("[ INFO ] stdout:", result);
+  console.log("[ INFO ] stdout:", res);
 
   return c.redirect("/");
 });
