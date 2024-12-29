@@ -11,7 +11,7 @@ Create `data/data.json` file with the following format.
   {
     "id": "example-server",
     "name": "Example Server",
-    "mac": "00:00:00:00:00:0",
+    "mac": "00:00:00:00:00:00",
     "ip": "10.0.0.100",
     "user": "root",
     "password": "secret"

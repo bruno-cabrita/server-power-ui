@@ -2,6 +2,7 @@ import $ from "dax";
 import { wake } from "wol";
 import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
+import { MachineSchema } from "~/schemas.ts";
 import { cmds } from "~/providers/commands.ts";
 import machineData from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
@@ -13,6 +14,27 @@ app.get("/*", serveStatic({ root: "./src/public/" }));
 
 app.get("/", (c: Context) => c.html(<Home machines={machineData} />));
 app.get("/add-server", (c: Context) => c.html(<AddServer />));
+
+/*
+ * ADD Server
+ */
+app.post("/add-server", async (c: Context) => {
+  const form = await c.req.formData();
+  const formObj: Record<string, string> = {};
+  formObj.id = crypto.randomUUID();
+  form.forEach((value, key: string) => (formObj[key] = value as string));
+
+  const { success, data } = MachineSchema.safeParse(formObj);
+
+  if (!success) {
+    return c.redirect("/add-server?form-error");
+  }
+
+  console.log(data);
+  // @TODO: append to da/data.json
+
+  return c.redirect("/");
+});
 
 /*
  * POWER ON
