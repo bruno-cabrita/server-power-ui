@@ -1,11 +1,11 @@
 import type { FC } from "hono/jsx";
 import BaseLayout from "~/layouts/Base.tsx";
-import { Machine } from "~/types.ts";
+import { Server } from "~/types.ts";
 import MachineCard from "~/components/MachineCard.tsx";
 import Header from "~/components/Header.tsx";
 import Button from "~/components/Button.tsx";
 
-const View: FC<{ machines: Machine[] }> = (props: { machines: Machine[] }) => {
+const View: FC<{ servers: Server[] }> = (props: { servers: Server[] }) => {
   return (
     <BaseLayout>
       <Header>
@@ -19,8 +19,8 @@ const View: FC<{ machines: Machine[] }> = (props: { machines: Machine[] }) => {
         </nav>
       </Header>
       <div class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {props.machines.map((machine) => {
-          return <MachineCard machine={machine} />;
+        {props.servers.map((server) => {
+          return <MachineCard machine={server} />;
         })}
       </div>
     </BaseLayout>

@@ -1,30 +1,42 @@
 import { exists } from "fs";
-import { MachineSchema } from "~/schemas.ts";
+import { ServerSchema } from "~/schemas.ts";
+import { Server } from "../types.ts";
 
-const dataFilePath = "./data/data.json";
+async function useData() {
+  const dataFilePath = "./data/servers.json";
 
-const dataFileOk = await exists(dataFilePath, {
-  isReadable: true,
-  isFile: true,
-});
+  const dataFileOk = await exists(dataFilePath, {
+    isReadable: true,
+    isFile: true,
+  });
 
-if (!dataFileOk) {
-  console.log("[ ERROR ] Data file not found!");
-  await Deno.writeTextFile("data/data.json", "[]");
+  if (!dataFileOk) {
+    console.log("[ ERROR ] Data file not found!");
+    await Deno.writeTextFile(dataFilePath, "[]");
+  }
+
+  const { success, data } = ServerSchema.array().safeParse(
+    JSON.parse(await Deno.readTextFile(dataFilePath)),
+  );
+
+  if (!success || !data) {
+    console.log("[ ERROR ] Invalid data file format!");
+  }
+
+  if (data!.length <= 0) {
+    console.log("[ WARN ] No data!");
+  }
+
+  console.log("[  OK  ] Servers data file ok.");
+
+  function addServer(server: Server) {
+    console.log("TODO: addServer()", server);
+  }
+
+  return {
+    servers: data,
+    addServer,
+  };
 }
 
-const { success, data } = MachineSchema.array().safeParse(
-  JSON.parse(await Deno.readTextFile(dataFilePath)),
-);
-
-if (!success) {
-  console.log("[ ERROR ] Invalid data file format!");
-}
-
-if (data.length <= 0) {
-  console.log("[ ERROR ] No data!");
-}
-
-console.log("[  OK  ] Data file ok.");
-
-export default data!;
+export { useData };

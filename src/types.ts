@@ -1,4 +1,4 @@
 import { z } from "zod";
-import { MachineSchema } from "~/schemas.ts";
+import { ServerSchema } from "~/schemas.ts";
 
-export type Machine = z.infer<typeof MachineSchema>;
+export type Server = z.infer<typeof ServerSchema>;

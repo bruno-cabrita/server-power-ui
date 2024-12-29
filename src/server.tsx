@@ -2,17 +2,20 @@ import $ from "dax";
 import { wake } from "wol";
 import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
-import { MachineSchema } from "~/schemas.ts";
+import { ServerSchema } from "~/schemas.ts";
+import { Server } from "~/types.ts";
 import { cmds } from "~/providers/commands.ts";
-import machineData from "~/providers/data.ts";
+import { useData } from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
 import Home from "~/views/Home.tsx";
+
+const { addServer, servers } = await useData();
 
 const app = new Hono();
 
 app.get("/*", serveStatic({ root: "./src/public/" }));
 
-app.get("/", (c: Context) => c.html(<Home machines={machineData} />));
+app.get("/", (c: Context) => c.html(<Home servers={servers!} />));
 app.get("/add-server", (c: Context) => c.html(<AddServer />));
 
 /*
@@ -24,31 +27,30 @@ app.post("/add-server", async (c: Context) => {
   formObj.id = crypto.randomUUID();
   form.forEach((value, key: string) => (formObj[key] = value as string));
 
-  const { success, data } = MachineSchema.safeParse(formObj);
+  const { success, data } = ServerSchema.safeParse(formObj);
 
   if (!success) {
     return c.redirect("/add-server?form-error");
   }
 
-  console.log(data);
-  // @TODO: append to da/data.json
+  addServer(data);
 
   return c.redirect("/");
 });
-
+``;
 /*
  * POWER ON
  */
-app.post("/power-on/:id", async (c) => {
+app.post("/power-on/:id", async (c: Context) => {
   const { id } = c.req.param();
 
-  const machine = machineData?.find((item) => item.id == id);
+  const server = servers?.find((item: Server) => item.id == id);
 
-  if (!machine) return c.notFound();
+  if (!server) return c.notFound();
 
-  console.log("[ INFO ] Powering on:", machine.id);
+  console.log("[ INFO ] Powering on:", server.id);
 
-  await wake(machine.mac);
+  await wake(server.mac);
 
   return c.redirect("/");
 });
@@ -56,16 +58,16 @@ app.post("/power-on/:id", async (c) => {
 /*
  * POWER OFF
  */
-app.post("/power-off/:id", async (c) => {
+app.post("/power-off/:id", async (c: Context) => {
   const { id } = c.req.param();
 
-  const machine = machineData?.find((item) => item.id == id);
+  const server = servers?.find((item: Server) => item.id == id);
 
-  if (!machine) return c.notFound();
+  if (!server) return c.notFound();
 
-  console.log("[ INFO ] Powering off:", machine.id);
+  console.log("[ INFO ] Powering off:", server.id);
 
-  const result = await $`${cmds.poweroff(machine)}`.text("stdout");
+  const result = await $`${cmds.poweroff(server)}`.text("stdout");
 
   console.log("[ INFO ] stdout:", result);
 
@@ -75,16 +77,16 @@ app.post("/power-off/:id", async (c) => {
 /*
  * PING
  */
-app.post("/ping/:id", async (c) => {
+app.post("/ping/:id", async (c: Context) => {
   const { id } = c.req.param();
 
-  const machine = machineData?.find((item) => item.id == id);
+  const server = servers?.find((item: Server) => item.id == id);
 
-  if (!machine) return c.notFound();
+  if (!server) return c.notFound();
 
-  console.log("[ INFO ] Pinging:", machine.id);
+  console.log("[ INFO ] Pinging:", server.id);
 
-  const result = await $`${cmds.ping(machine)}`.text("stdout");
+  const result = await $`${cmds.ping(server)}`.text("stdout");
 
   console.log("[ INFO ] stdout:", result);
 
