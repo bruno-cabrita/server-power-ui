@@ -82,7 +82,9 @@ app.post("/power-on/:id", async (c: Context) => {
   console.log("[ INFO ] Powering on:", server.id);
 
   const { poweron } = useCommands(server);
-  await poweron();
+  const res = await poweron();
+
+  console.log("[ INFO ] Power on:", server.id, res);
 
   return c.redirect("/");
 });
@@ -102,7 +104,7 @@ app.post("/power-off/:id", async (c: Context) => {
   const { poweroff } = useCommands(server);
   const res = await poweroff();
 
-  console.log("[ INFO ] stdout:", res);
+  console.log("[ INFO ] Power off:", server.id, res);
 
   return c.redirect("/");
 });
@@ -122,7 +124,7 @@ app.post("/ping/:id", async (c: Context) => {
   const { ping } = useCommands(server);
   const res = await ping();
 
-  console.log("[ INFO ] stdout:", res);
+  console.log("[ INFO ] Ping off:", server.id, res);
 
   return c.redirect("/");
 });

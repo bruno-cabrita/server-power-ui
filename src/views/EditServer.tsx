@@ -94,7 +94,7 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
             id="password"
             name="password"
             type="password"
-            placeholder="Same passoword"
+            placeholder="Same password"
             class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
           />
           <div class="col-span-2 flex flex-row justify-center mt-4">
