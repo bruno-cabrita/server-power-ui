@@ -1,7 +1,7 @@
 import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { ServerSchema } from "~/schemas.ts";
-import { Server } from "~/types.ts";
+import { Server, Status } from "~/types.ts";
 import { useCommands } from "~/providers/commands.ts";
 import { useData } from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
@@ -14,7 +14,23 @@ const app = new Hono();
 
 app.get("/*", serveStatic({ root: "./src/public/" }));
 
-app.get("/", (c: Context) => c.html(<Home servers={servers!} />));
+app.get("/", async (c: Context) => {
+  const promises: Promise<boolean>[] = [];
+
+  servers.forEach((server: Server) => {
+    const { ping } = useCommands(server);
+    promises.push(ping());
+  });
+
+  const values = await Promise.all(promises);
+
+  const status: Status = servers.map((server: Server, idx: number) => ({
+    id: server.id,
+    online: values[idx],
+  }));
+
+  return c.html(<Home servers={servers!} status={status} />);
+});
 
 app.get("/add-server", (c: Context) => c.html(<AddServer />));
 
