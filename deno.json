@@ -1,10 +1,10 @@
 {
   "tasks": {
-    "init": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.0-beta.1/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss",
-    "format": "deno lint && deno fmt",
+    "init": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.0-beta.8/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss",
     "tailwind:prod": "./tailwindcss --optimize -m -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "tailwind:dev": "./tailwindcss -w -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "dev": "deno task tailwind:dev & deno run -RNEWS --unstable-net --allow-run --watch src/server.tsx",
+    "format": "deno lint && deno fmt",
     "build": "deno task format && deno task tailwind:prod",
     "serve": "deno run -RNEWS --unstable-net --allow-run src/server.tsx",
     "preview": "deno task build && deno task serve"

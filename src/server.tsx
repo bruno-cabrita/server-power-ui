@@ -1,7 +1,7 @@
 import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { ServerSchema } from "~/schemas.ts";
-import { Server, Status } from "~/types.ts";
+import type { Server, Status, Alert, AlertType } from "~/types.ts";
 import { useCommands } from "~/providers/commands.ts";
 import { useData } from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
@@ -29,7 +29,14 @@ app.get("/", async (c: Context) => {
     online: values[idx],
   }));
 
-  return c.html(<Home servers={servers!} status={status} />);
+  const url = new URL(c.req.url);
+
+  const alert: Alert = {
+    server: url.searchParams.get("server") || "",
+    type: (url.searchParams.get("alert-type") as AlertType) || "info",
+  };
+
+  return c.html(<Home servers={servers!} status={status} alert={alert} />);
 });
 
 app.get("/add-server", (c: Context) => c.html(<AddServer />));
@@ -59,7 +66,7 @@ app.post("/add-server", async (c: Context) => {
 
   await addServer(data);
 
-  return c.redirect("/");
+  return c.redirect(`/?server=${data.id}&alert-type=add-server-success`);
 });
 
 /*
@@ -82,7 +89,7 @@ app.post("/edit-server/:id", async (c: Context) => {
 
   await updateServer(server);
 
-  return c.redirect("/");
+  return c.redirect(`/?server=${server.id}&alert-type=updated-server-success`);
 });
 
 /*
@@ -102,7 +109,7 @@ app.post("/power-on/:id", async (c: Context) => {
 
   console.log("[ INFO ] Power on:", server.id, res);
 
-  return c.redirect("/");
+  return c.redirect(`/?server=${server.id}&alert-type=poweron-success`);
 });
 
 /*
@@ -122,7 +129,7 @@ app.post("/power-off/:id", async (c: Context) => {
 
   console.log("[ INFO ] Power off:", server.id, res);
 
-  return c.redirect("/");
+  return c.redirect(`/?server=${server.id}&alert-type=poweroff-success`);
 });
 
 /*

@@ -1,13 +1,15 @@
 import type { FC } from "hono/jsx";
 import BaseLayout from "~/layouts/Base.tsx";
-import { Server, Status } from "~/types.ts";
+import type { Server, Status, Alert } from "~/types.ts";
 import ServerCard from "~/components/ServerCard.tsx";
 import Header from "~/components/Header.tsx";
 import Button from "~/components/Button.tsx";
+import AlertComponent from "~/components/Alert.tsx";
 
 type Props = {
   servers: Server[];
   status: Status;
+  alert?: Alert;
 };
 
 const View: FC<Props> = (props: Props) => {
@@ -31,6 +33,7 @@ const View: FC<Props> = (props: Props) => {
           <h3 class="text-lg font-bold uppercase">Add Server</h3>
         </a>
       </div>
+      <AlertComponent alert={props.alert} />
     </BaseLayout>
   );
 };
