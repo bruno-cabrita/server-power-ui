@@ -24,6 +24,6 @@ export type AlertType =
   | "delete-server-error";
 
 export type Alert = {
-  type: AlertType;
+  type?: AlertType;
   server?: string;
 };

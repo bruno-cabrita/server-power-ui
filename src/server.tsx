@@ -32,8 +32,8 @@ app.get("/", async (c: Context) => {
   const url = new URL(c.req.url);
 
   const alert: Alert = {
-    server: url.searchParams.get("server") || "",
-    type: (url.searchParams.get("alert-type") as AlertType) || "info",
+    server: url.searchParams.get("server") || undefined,
+    type: (url.searchParams.get("alert-type") as AlertType) || undefined,
   };
 
   return c.html(<Home servers={servers!} status={status} alert={alert} />);
