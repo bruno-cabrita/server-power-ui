@@ -5,8 +5,6 @@ async function Component({ alert }: { alert: Alert }) {
   const { servers } = await useData();
   const server = servers.find((server: Server) => server.id === alert.server);
 
-  if (!server) return "";
-
   const message =
     alert.type === "add-server-success"
       ? `${server?.name} was successfully added.`
@@ -16,7 +14,9 @@ async function Component({ alert }: { alert: Alert }) {
           ? `${server?.name} was powered on. Wait a few minutes before refresh the page to confirm.`
           : alert.type === "poweroff-success"
             ? `${server?.name} was powered off. Wait a few minutes before refresh the page to confirm.`
-            : "";
+            : alert.type === "delete-server-success"
+              ? `The server was deleted successfully.`
+              : "";
 
   const bgColor = alert.type.includes("success")
     ? "bg-green-700"

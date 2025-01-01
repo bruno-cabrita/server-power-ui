@@ -49,10 +49,20 @@ async function useData() {
     await writeServersDataFile(servers);
   }
 
+  async function deleteServer(id: string) {
+    console.log("deleteServer:", id);
+    const serverIdx = servers.findIndex((item: Server) => item.id === id);
+
+    servers.splice(serverIdx, 1);
+
+    await writeServersDataFile(servers);
+  }
+
   return {
     servers,
     addServer,
     updateServer,
+    deleteServer,
   };
 }
 

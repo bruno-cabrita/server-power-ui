@@ -15,10 +15,9 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
         </nav>
       </Header>
       <div class="mx-auto px-4 py-6">
-        <form
-          method="post"
-          class="border-2 border-gray-800 rounded-xl p-4 grid grid-cols-[110px_180px] gap-2 items-center overflow-hidden"
-        >
+        <form method="post" id="update"></form>
+        <form method="post" id="delete"></form>
+        <div class="border-2 border-gray-800 rounded-xl p-4 grid grid-cols-[110px_180px] gap-2 items-center overflow-hidden">
           <label
             for="name"
             class="justify-self-end font-bold text-sm uppercase tracking-tight"
@@ -26,6 +25,7 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
             Name:
           </label>
           <input
+            form="update"
             required
             id="name"
             name="name"
@@ -41,6 +41,7 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
             Mac Address:
           </label>
           <input
+            form="update"
             required
             id="mac"
             name="mac"
@@ -57,6 +58,7 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
             IP Address:
           </label>
           <input
+            form="update"
             required
             id="ip"
             name="ip"
@@ -76,6 +78,7 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
             User:
           </label>
           <input
+            form="update"
             required
             id="user"
             name="user"
@@ -91,16 +94,24 @@ const View: FC<{ server: Server }> = ({ server }: { server: Server }) => {
             Password:
           </label>
           <input
+            form="update"
             id="password"
             name="password"
             type="password"
             placeholder="Same password"
             class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
           />
-          <div class="col-span-2 flex flex-row justify-center mt-4">
-            <Button type="submit">Update</Button>
+          <input form="update" name="action" type="hidden" value="update" />
+          <input form="delete" name="action" type="hidden" value="delete" />
+          <div class="col-span-2 flex flex-row justify-center gap-4 mt-4">
+            <Button type="submit" form="delete">
+              Delete
+            </Button>
+            <Button type="submit" form="update">
+              Update
+            </Button>
           </div>
-        </form>
+        </div>
       </div>
     </BaseLayout>
   );

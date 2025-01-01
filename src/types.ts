@@ -25,5 +25,5 @@ export type AlertType =
 
 export type Alert = {
   type: AlertType;
-  server: string;
+  server?: string;
 };

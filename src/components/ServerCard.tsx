@@ -42,11 +42,13 @@ function Component({ server, status }: Props) {
             <Button type="submit">Power Off</Button>
           </form>
         )}
-        {/*
+        {
+          /*
           <form method="post" action={`/ping/${server.id}`}>
             <Button type="submit">Ping</Button>
           </form>
-        */}
+        */
+        }
       </div>
     </div>
   );

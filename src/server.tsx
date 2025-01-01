@@ -1,14 +1,14 @@
 import { type Context, Hono } from "hono";
 import { serveStatic } from "hono/deno";
 import { ServerSchema } from "~/schemas.ts";
-import type { Server, Status, Alert, AlertType } from "~/types.ts";
+import type { Alert, AlertType, Server, Status } from "~/types.ts";
 import { useCommands } from "~/providers/commands.ts";
 import { useData } from "~/providers/data.ts";
 import AddServer from "~/views/AddServer.tsx";
 import EditServer from "~/views/EditServer.tsx";
 import Home from "~/views/Home.tsx";
 
-const { addServer, updateServer, servers } = await useData();
+const { addServer, updateServer, deleteServer, servers } = await useData();
 
 const app = new Hono();
 
@@ -81,15 +81,23 @@ app.post("/edit-server/:id", async (c: Context) => {
   const formObj: Record<string, string> = {};
   form.forEach((value, key: string) => (formObj[key] = value as string));
 
-  server.name = formObj.name;
-  server.ip = formObj.ip;
-  server.mac = formObj.mac;
-  server.user = formObj.user;
-  server.password ||= formObj.password;
+  if (formObj.action == "update") {
+    server.name = formObj.name;
+    server.ip = formObj.ip;
+    server.mac = formObj.mac;
+    server.user = formObj.user;
+    server.password ||= formObj.password;
 
-  await updateServer(server);
+    await updateServer(server);
+    return c.redirect(
+      `/?server=${server.id}&alert-type=updated-server-success`,
+    );
+  }
 
-  return c.redirect(`/?server=${server.id}&alert-type=updated-server-success`);
+  if (formObj.action == "delete") {
+    await deleteServer(id);
+    return c.redirect(`/?alert-type=delete-server-success`);
+  }
 });
 
 /*

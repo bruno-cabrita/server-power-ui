@@ -1,6 +1,6 @@
 import type { FC } from "hono/jsx";
 import BaseLayout from "~/layouts/Base.tsx";
-import type { Server, Status, Alert } from "~/types.ts";
+import type { Alert, Server, Status } from "~/types.ts";
 import ServerCard from "~/components/ServerCard.tsx";
 import Header from "~/components/Header.tsx";
 import Button from "~/components/Button.tsx";
