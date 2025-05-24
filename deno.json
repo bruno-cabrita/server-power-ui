@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "init": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.0.0-beta.8/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss",
+    "init": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.7/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss",
     "tailwind:prod": "./tailwindcss --optimize -m -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "tailwind:dev": "./tailwindcss -w -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
     "dev": "deno task tailwind:dev & deno run -RNEWS --unstable-net --allow-run --watch src/server.tsx",
@@ -11,11 +11,11 @@
   },
   "imports": {
     "~/": "./src/",
-    "dax": "jsr:@david/dax@^0.42.0",
-    "fs": "jsr:@std/fs@^1.0.8",
-    "hono": "jsr:@hono/hono@^4.6.14",
+    "dax": "jsr:@david/dax@^0.43.1",
+    "fs": "jsr:@std/fs@^1.0.17",
+    "hono": "jsr:@hono/hono@^4.7.10",
     "wol": "jsr:@bukhalo/wol@^2.0.1",
-    "zod": "npm:zod@^3.24.1"
+    "zod": "npm:zod@^3.25.28"
   },
   "compilerOptions": {
     "jsx": "precompile",

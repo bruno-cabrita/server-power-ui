@@ -6,8 +6,10 @@ const Layout: FC = ({ children }) => {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#030712" />
         <title>Server Power UI</title>
         <link rel="stylesheet" href="/css/styles.css" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body class="min-h-100 bg-gray-950 text-gray-500 flex flex-col items-stretch">
         {children}

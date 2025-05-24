@@ -1,0 +1,16 @@
+{
+  "name": "ServerPower",
+  "short_name": "ServerPower",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#030712",
+  "description": "A simply readable Hacker News app.",
+  "icons": [
+    {
+      "src": "img/icons/icon.svg",
+      "sizes": "all",
+      "type": "image/svg",
+      "purpose": "maskable"
+    }
+  ]
+}
