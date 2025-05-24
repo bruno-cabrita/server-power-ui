@@ -1,11 +1,12 @@
 {
-  "name": "ServerPower",
+  "name": "Server Power",
   "short_name": "ServerPower",
-  "start_url": ".",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#030712",
   "theme_color": "#C800DE",
   "description": "A simple UI to manage local servers power.",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "img/icons/icon.svg",
