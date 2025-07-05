@@ -11,11 +11,11 @@
   },
   "imports": {
     "~/": "./src/",
-    "dax": "jsr:@david/dax@^0.43.1",
-    "fs": "jsr:@std/fs@^1.0.17",
-    "hono": "jsr:@hono/hono@^4.7.10",
+    "dax": "jsr:@david/dax@^0.43.2",
+    "fs": "jsr:@std/fs@^1.0.19",
+    "hono": "jsr:@hono/hono@^4.8.4",
     "wol": "jsr:@bukhalo/wol@^2.0.1",
-    "zod": "npm:zod@^3.25.28"
+    "zod": "npm:zod@^3.25.74"
   },
   "compilerOptions": {
     "jsx": "precompile",
