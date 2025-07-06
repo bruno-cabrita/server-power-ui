@@ -17,7 +17,6 @@ function refreshHandler() {
   fetch('/api/server/list')
     .then((res) => res.json())
     .then((data) => {
-      console.log('data:', data)
       servers.value = data
     })
     .catch((err) => {
@@ -43,7 +42,6 @@ onBeforeMount(refreshHandler)
       <template v-for="server in servers" :key="`server-${server.id}`">
         <ServerCard :server="server" />
       </template>
-
       <RouterLink
         :to="{ name: 'create-server'}"
         class="min-h-36 border-2 border-dashed border-gray-900 rounded-xl p-4 flex flex-col justify-center items-center gap-2 cursor-pointer overflow-hidden hover:border-gray-700 text-gray-800 hover:text-gray-600"

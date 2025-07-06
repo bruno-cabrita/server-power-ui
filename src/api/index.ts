@@ -7,6 +7,7 @@ const data = await useData()
 
 api.get('/server/list', (c) => {
   const servers = data.servers.map(({ password, user, ...rest }) => rest)
+  
   return c.json(servers)
 })
 

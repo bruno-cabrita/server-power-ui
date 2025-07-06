@@ -10,7 +10,7 @@
   "icons": [
     {
       "src": "img/icons/icon.svg",
-      "sizes": "all",
+      "sizes": "any",
       "type": "image/svg",
       "purpose": "maskable"
     }
