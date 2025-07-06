@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { IconReload } from '@tabler/icons-vue'
+import { useLayoutStore } from '../store.ts'
 import type { ServerList } from '../types.ts'
 import Button from '../components/Button.vue'
 
@@ -6,12 +9,41 @@ const props = defineProps<{
   server: ServerList[number],
 }>()
 
+const layout = useLayoutStore()
+const isLoading = ref(false)
+
 async function powerOnHandler() {
-  console.log(`powerOnHandler()`)
+  isLoading.value = true
+  fetch(`/api/server/${props.server.id}/poweron`)
+    .then((res) => res.json())
+    .then(({ success }) => {
+      if(success)
+        layout.showSuccessAlert(`${props.server.name} was powered on. Wait a few minutes before refresh the page to confirm.`)
+    })
+    .catch((err) => {
+      console.error(err)
+      layout.showDangerAlert(err.message)
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 
 async function powerOffHandler() {
-  console.log(`powerOffHandler()`)
+  isLoading.value = true
+  fetch(`/api/server/${props.server.id}/poweroff`)
+    .then((res) => res.json())
+    .then(({ success }) => {
+      if(success)
+        layout.showSuccessAlert(`${props.server.name} was powered off. Wait a few minutes before refresh the page to confirm.`)
+    })
+    .catch((err) => {
+      console.error(err)
+      layout.showDangerAlert(err.message)
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 </script>
 <template>
@@ -33,7 +65,8 @@ async function powerOffHandler() {
       <p><strong>MAC:</strong> {{ props.server.mac }}</p>
     </div>
     <div class="flex flex-row gap-2">
-      <Button v-if="props.server.online" @click="powerOnHandler">Power On</Button>
+      <Button v-if="isLoading"><IconReload :size="20" v-if="isLoading" class="animate-spin"/></Button>
+      <Button v-else-if="!props.server.online" @click="powerOnHandler">Power On</Button>
       <Button v-else @click="powerOffHandler">Power Off</Button>
     </div>
   </div>
