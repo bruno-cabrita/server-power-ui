@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent-50: var(--color-fuchsia-50);
+  --color-accent-100: var(--color-fuchsia-100);
+  --color-accent-200: var(--color-fuchsia-200);
+  --color-accent-300: var(--color-fuchsia-300);
+  --color-accent-400: var(--color-fuchsia-400);
+  --color-accent-500: var(--color-fuchsia-500);
+  --color-accent-600: var(--color-fuchsia-600);
+  --color-accent-700: var(--color-fuchsia-700);
+  --color-accent-800: var(--color-fuchsia-800);
+  --color-accent-900: var(--color-fuchsia-900);
+  --color-accent-950: var(--color-fuchsia-950);
+
+  --color-default: var(--color-gray-400);
+  --color-info: var(--color-sky-400);
+  --color-success: var(--color-lime-600);
+  --color-danger: var(--color-red-600);
+  --color-warning: var(--color-amber-500);
+}

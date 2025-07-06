@@ -1,61 +1,56 @@
-import { exists } from "fs";
-import { ServerSchema } from "~/schemas.ts";
-import { Server } from "../types.ts";
+/// <reference lib="deno.ns" />
+import { ensureFile } from 'fs/ensure-file'
+import { readTextFile } from 'fs/unstable-read-text-file'
+import { writeTextFile } from 'fs/unstable-write-text-file'
+import { ServerSchema } from '../schemas.ts'
+import type { Server } from '../types.ts'
 
 async function useData() {
-  const dataFilePath = "./data/servers.json";
+  const dataFilePath = './data/servers.json'
 
-  const dataFileOk = await exists(dataFilePath, {
-    isReadable: true,
-    isFile: true,
-  });
+  await ensureFile(dataFilePath)
 
-  if (!dataFileOk) {
-    console.log("[ ERROR ] Data file not found!");
-    await Deno.writeTextFile(dataFilePath, "[]");
-  }
-
-  const fileText = await Deno.readTextFile(dataFilePath);
+  const fileText = await readTextFile(dataFilePath)
 
   const { success, data } = ServerSchema.array().safeParse(
     JSON.parse(fileText),
-  );
+  )
 
   if (!success || !data) {
-    console.log("[ ERROR ] Invalid data file format!");
+    console.log('[ ERROR ] Invalid data file format!')
   }
 
-  const servers = !success || !data ? [] : data;
+  const servers = !success || !data ? [] : data
 
   async function writeServersDataFile(servers: Server[]) {
-    return await Deno.writeTextFile(
+    return await writeTextFile(
       dataFilePath,
-      JSON.stringify(servers, null, "  "),
-    );
+      JSON.stringify(servers, null, '  '),
+    )
   }
 
   async function addServer(server: Server) {
-    servers.push(server);
-    await writeServersDataFile(servers);
+    servers.push(server)
+    await writeServersDataFile(servers)
   }
 
   async function updateServer(server: Server) {
     const serverIdx = servers.findIndex(
       (item: Server) => item.id === server.id,
-    );
+    )
 
-    servers[serverIdx] = server;
+    servers[serverIdx] = server
 
-    await writeServersDataFile(servers);
+    await writeServersDataFile(servers)
   }
 
   async function deleteServer(id: string) {
-    console.log("deleteServer:", id);
-    const serverIdx = servers.findIndex((item: Server) => item.id === id);
+    console.log('deleteServer:', id)
+    const serverIdx = servers.findIndex((item: Server) => item.id === id)
 
-    servers.splice(serverIdx, 1);
+    servers.splice(serverIdx, 1)
 
-    await writeServersDataFile(servers);
+    await writeServersDataFile(servers)
   }
 
   return {
@@ -63,7 +58,7 @@ async function useData() {
     addServer,
     updateServer,
     deleteServer,
-  };
+  }
 }
 
-export { useData };
+export { useData }

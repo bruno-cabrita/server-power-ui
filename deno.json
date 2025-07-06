@@ -1,24 +1,33 @@
 {
   "tasks": {
-    "init": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.7/tailwindcss-linux-x64 -o tailwindcss && chmod +x tailwindcss",
-    "tailwind:prod": "./tailwindcss --optimize -m -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
-    "tailwind:dev": "./tailwindcss -w -i ./src/assets/css/styles.css -o ./src/public/css/styles.css",
-    "dev": "deno task tailwind:dev & deno run -RNEWS --unstable-net --allow-run --watch src/server.tsx",
-    "format": "deno lint && deno fmt",
-    "build": "deno task format && deno task tailwind:prod",
-    "serve": "deno run -RNEWS --unstable-net --allow-run src/server.tsx",
+    "install": "deno install --allow-scripts=npm:@tailwindcss/oxide",
+    "dev": "deno run -A --watch src/server.ts & deno run -A npm:vite --host",
+    "build": "deno run -A npm:vite build",
+    "serve": "deno run -NRW src/server.ts",
     "preview": "deno task build && deno task serve"
   },
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM", "DOM.Iterable"]
+  },
   "imports": {
-    "~/": "./src/",
-    "dax": "jsr:@david/dax@^0.43.2",
-    "fs": "jsr:@std/fs@^1.0.19",
-    "hono": "jsr:@hono/hono@^4.8.4",
+    "pinia": "npm:pinia@^3.0.3",
     "wol": "jsr:@bukhalo/wol@^2.0.1",
+    "dax": "jsr:@david/dax@^0.43.2",
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
+    "fs": "jsr:@std/fs@^1.0.19",
+    "@tabler/icons-vue": "npm:@tabler/icons-vue@^3.34.0",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.11",
+    "@vitejs/plugin-vue": "npm:@vitejs/plugin-vue@^6.0.0",
+    "hono": "npm:hono@^4.8.4",
+    "tailwindcss": "npm:tailwindcss@^4.1.11",
+    "vite": "npm:vite@^7.0.2",
+    "vue": "npm:vue@^3.5.17",
+    "vue-router": "npm:vue-router@^4.5.1",
     "zod": "npm:zod@^3.25.74"
   },
-  "compilerOptions": {
-    "jsx": "precompile",
-    "jsxImportSource": "hono/jsx"
-  }
+  "fmt": {
+    "singleQuote": true,
+    "semiColons": false
+  },
+  "nodeModulesDir": "auto"
 }

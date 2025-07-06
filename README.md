@@ -1,21 +1,19 @@
-# Server Power UI
+# Vite + Deno + Vue 3 + TypeScript
 
-A Web UI to control local servers power with Wake-On-Lan and SSH.
+## Running
 
-## Commands
+You need to have Deno v2.0.0 or later installed to run this repo.
 
-| Description    | Commands            |
-| :------------- | :------------------ |
-| Initialization | `deno task init`    |
-| Development    | `deno taks dev`     |
-| Lint + Format  | `deno task format`  |
-| Build          | `deno task build`   |
-| Preview        | `deno task preview` |
+Start a dev server:
 
-## Docker
+```
+$ deno task dev
+```
 
-| Description        | Commands                               |
-| :----------------- | :------------------------------------- |
-| Run container      | `docker compose up -d`                 |
-| Enter docker shell | `docker exec -it server-power-ui bash` |
-| Remove everything  | `docker compose down --rmi all -v`     |
+## Deploy
+
+Build production assets:
+
+```
+$ deno task build
+```

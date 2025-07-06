@@ -1,29 +1,16 @@
-import { z } from "zod";
-import { ServerSchema } from "~/schemas.ts";
+import { z } from 'zod'
+import { ServerSchema } from './schemas.ts'
 
-export type Server = z.infer<typeof ServerSchema>;
+export type Server = z.infer<typeof ServerSchema>
+export type ServerList = (Omit<Server, 'user' | 'password'> & { online: boolean })[]
+export type ServerCreate = Omit<Server, 'id'>
+export type ServerUpdate = Server & { password?: string }
+export type ServerRead = Omit<Server, 'password'>
 
-export type Status = {
-  id: string;
-  online: boolean;
-}[];
-
-export type AlertType =
-  | "info"
-  | "poweroff-success"
-  | "poweroff-error"
-  | "poweron-success"
-  | "poweron-error"
-  | "ping-success"
-  | "ping-error"
-  | "add-server-success"
-  | "add-server-error"
-  | "update-server-success"
-  | "update-server-error"
-  | "delete-server-success"
-  | "delete-server-error";
+export type AlertType = 'default' | 'success' | 'danger' | 'warning' | 'info'
 
 export type Alert = {
-  type?: AlertType;
-  server?: string;
-};
+  isVisible: boolean,
+  type: AlertType,
+  message: string,
+}
