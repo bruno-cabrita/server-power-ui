@@ -33,7 +33,7 @@ api.get('/server/:id/poweron', async (c) => {
   const res = await poweron()
 
   console.log("[ INFO ] Power on:", server.id, res)
-  console.log(res)
+
   return c.json({success: res})
 })
 
