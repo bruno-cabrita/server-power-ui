@@ -1,9 +1,9 @@
 {
   "tasks": {
     "install": "deno install --allow-scripts=npm:@tailwindcss/oxide",
-    "dev": "deno run -A --unstable-net --watch src/server.ts & deno run -A npm:vite --host",
+    "dev": "deno run -A --unstable-net --allow-run --watch src/server.ts & deno run -A npm:vite --host",
     "build": "deno run -A npm:vite build",
-    "serve": "deno run -NRW --unstable-net src/server.ts",
+    "serve": "deno run -NRWE --unstable-net --allow-run src/server.ts",
     "preview": "deno task build && deno task serve"
   },
   "compilerOptions": {
