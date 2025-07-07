@@ -10,8 +10,15 @@ async function useData() {
 
   await ensureFile(dataFilePath)
 
-  const fileText = await readTextFile(dataFilePath)
+  let fileText = await readTextFile(dataFilePath);
 
+  try {
+    JSON.parse(fileText)
+  } catch(_err) {
+    await writeTextFile(dataFilePath, "[]");
+    fileText = "[]";
+  }
+    
   const { success, data } = ServerSchema.array().safeParse(
     JSON.parse(fileText),
   )

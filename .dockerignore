@@ -6,4 +6,5 @@ Dockerfile*
 docker-compose*
 README.md
 data/
-tailwindcss
+dist/
+node_modules/
