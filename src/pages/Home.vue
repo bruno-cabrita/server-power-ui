@@ -2,30 +2,29 @@
 import { ref, onBeforeMount } from 'vue'
 import { IconReload } from '@tabler/icons-vue'
 import type { ServerList } from '../types.ts'
-import { useLayoutStore } from '../store.ts'
+import {
+  useLayoutStore,
+  useServersStore,
+} from '../store.ts'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
 import ServerCard from '../components/ServerCard.vue'
 
 const layout = useLayoutStore()
+const servers = useServersStore()
 const isLoading = ref(true)
-const servers = ref<ServerList>()
 
-function refreshHandler() {
+async function refreshHandler() {
   isLoading.value = true
 
-  fetch('/api/server/list')
-    .then((res) => res.json())
-    .then((data) => {
-      servers.value = data
-    })
+  await servers.fetch()
     .catch((err) => {
       console.error(err)
       layout.showDangerAlert(err.message)
     })
-    .finally(() => {
-      isLoading.value = false
-    })
+
+  isLoading.value = false
+
 }
 
 onBeforeMount(refreshHandler)
@@ -39,7 +38,7 @@ onBeforeMount(refreshHandler)
       </Button>
     </template>
     <main class="px-4 py-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-      <template v-for="server in servers" :key="`server-${server.id}`">
+      <template v-for="server in servers.servers" :key="`server-${server.id}`">
         <ServerCard :server="server" />
       </template>
       <RouterLink

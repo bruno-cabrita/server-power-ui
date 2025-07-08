@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import type { Alert } from './types.ts'
+import type { Alert, ServerList } from './types.ts'
 
 export const useLayoutStore = defineStore('layout', () => {
 
@@ -29,5 +29,25 @@ export const useLayoutStore = defineStore('layout', () => {
     setAlert,
     showSuccessAlert,
     showDangerAlert,
+  }
+})
+
+export const useServersStore = defineStore('servers', () => {
+
+  const servers = reactive<ServerList>([])
+
+  async function fetchServers(): Promise<ServerList> {
+    const data = await fetch('/api/server/list')
+      .then((res) => res.json())
+    
+    servers.length = 0
+    servers.push(...data)
+
+    return data
+  }
+
+  return {
+    servers,
+    fetch: fetchServers,
   }
 })
