@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
-import { z } from 'zod/v4'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
+import { ServerCreateInputSchema } from '../schemas.ts'
+import type { ServerCreateInput } from '../types.ts'
 
-const InputSchema = z.object({
-  name: z.string(),
-  mac: z.string().regex(/^[0-9a-fA-F]{1,2}(:[0-9a-fA-F]{1,2}){5}$/),
-  ip: z.ipv4(),
-  user: z.string(),
-  password: z.string(),
-});
-
-const form = reactive({
+const form = reactive<ServerCreateInput>({
   name: '',
   mac: '',
   ip: '',
@@ -21,7 +14,7 @@ const form = reactive({
 })
 
 const isFormValid = computed(() => {
-  const { success } = InputSchema.safeParse({...form})
+  const { success } = ServerCreateInputSchema.safeParse({...form})
   return success
 })
 
