@@ -11,6 +11,7 @@
   },
   "imports": {
     "pinia": "npm:pinia@^3.0.3",
+    "pinia-plugin-persistedstate": "npm:pinia-plugin-persistedstate@^4.4.1",
     "wol": "jsr:@bukhalo/wol@^2.0.1",
     "dax": "jsr:@david/dax@^0.43.2",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
