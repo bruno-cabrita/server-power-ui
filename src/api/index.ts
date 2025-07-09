@@ -7,6 +7,7 @@ const api = new Hono()
 const {
   servers,
   addServer,
+  updateServer,
 } = await useData()
 
 api.get('/server/list', async (c) => {
@@ -22,6 +23,30 @@ api.get('/server/list', async (c) => {
   })
   const res = await Promise.all(promises)
   return c.json(res)
+})
+
+api.get('/server/:id', (c) => {
+  const serverId = c.req.param('id')
+  const server = servers?.find((item) => item.id == serverId)
+
+  if (!server) return c.notFound()
+
+  const { id, password, ...rest } = server
+
+  return c.json(rest)
+})
+
+api.put('/server/:id/update', async (c) => {
+  const serverId = c.req.param('id')
+  const server = servers?.find((item) => item.id == serverId)
+
+  if (!server) return c.notFound()
+
+  const data = await c.req.json()
+
+  await updateServer(data)
+
+  return c.json({success: true})
 })
 
 api.post('/server/create', async (c) => {

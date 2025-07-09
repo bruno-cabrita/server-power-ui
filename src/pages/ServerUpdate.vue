@@ -1,25 +1,71 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref, onBeforeMount } from 'vue'
+import { IconReload } from '@tabler/icons-vue'
+import { useRouter, useRoute } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
-import { ServerCreateInputSchema } from '../schemas.ts'
+import { useLayoutStore } from '../store.ts'
+import { ServerUpdateInputSchema } from '../schemas.ts'
+import type { ServerUpdateInput } from '../types.ts'
 
-const form = reactive({
+const route = useRoute()
+const router = useRouter()
+const layout = useLayoutStore()
+const isLoading = ref(false)
+
+const id = route.params.id as string
+
+const form = reactive<ServerUpdateInput>({
   name: '',
   mac: '',
   ip: '',
   user: '',
-  password: '',
 })
 
 const isFormValid = computed(() => {
-  const { success } = ServerCreateInputSchema.safeParse({...form})
+  const { success } = ServerUpdateInputSchema.safeParse({...form})
   return success
 })
 
 async function submitHandler() {
-  console.log(`submirHandler():`, form)
+  isLoading.value = true
+
+  const res = await fetch(`/api/server/${id}/update`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err)
+      layout.showDangerAlert(err.message)
+    })
+  
+  isLoading.value = false
+  if(res.success) {
+    layout.showSuccessAlert(`Server ${form.name} was updated.`)
+    router.push({ name: 'home' })
+  } else {
+    layout.showDangerAlert(`Error ocurred when creating server.`)
+  }
 }
+
+async function fetchData() {
+  isLoading.value = true
+
+  const res = await fetch(`/api/server/${id}`)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err)
+      layout.showDangerAlert(err.message)
+    })
+  
+  isLoading.value = false
+
+  Object.assign(form, res)
+}
+
+onBeforeMount(fetchData)
 </script>
 <template>
   <MainLayout>
@@ -80,11 +126,14 @@ async function submitHandler() {
           v-model="form.password"
           id="password"
           type="password"
-          placeholder="secret"
+          placeholder="(optional)"
           class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
         />
         <div class="col-span-2 flex flex-row justify-center mt-4">
-          <Button @click="submitHandler" :disabled="!isFormValid">Submit</Button>
+          <Button @click="submitHandler" :disabled="!isFormValid">
+            <IconReload :size="20" v-if="isLoading" class="animate-spin"/>
+            <span v-else>Update</span>
+          </Button>
         </div>
       </main>
     </main>
