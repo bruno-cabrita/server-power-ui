@@ -34,7 +34,9 @@ export const useLayoutStore = defineStore('layout', () => {
 
 export const useServersStore = defineStore('servers', () => {
 
-  const servers = reactive<ServerList>(JSON.parse(localStorage.getItem('servers') || '{"servers":[]}').servers)
+  const servers = reactive<ServerList>(
+    JSON.parse(localStorage.getItem('servers') || '{"servers":[]}').servers
+  )
 
   async function fetchServers(): Promise<ServerList> {
     const data = await fetch('/api/server/list')
@@ -42,6 +44,8 @@ export const useServersStore = defineStore('servers', () => {
     
     servers.length = 0
     servers.push(...data)
+
+    localStorage.setItem('servers', JSON.stringify({servers: data}))
 
     return data
   }

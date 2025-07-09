@@ -4,7 +4,10 @@ import { useCommands } from '../providers/commands.ts'
 
 const api = new Hono()
 
-const { servers } = await useData()
+const {
+  servers,
+  addServer,
+} = await useData()
 
 api.get('/server/list', async (c) => {
   const promises = servers.map(async (server) => {
@@ -19,6 +22,12 @@ api.get('/server/list', async (c) => {
   })
   const res = await Promise.all(promises)
   return c.json(res)
+})
+
+api.post('/server/create', async (c) => {
+  const data = await c.req.json()
+  await addServer(data)
+  return c.json({success: true})
 })
 
 api.get('/server/:id/poweron', async (c) => {

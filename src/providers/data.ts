@@ -36,8 +36,12 @@ async function useData() {
     )
   }
 
-  async function addServer(server: Server) {
-    servers.push(server)
+  async function addServer(server: Omit<Server, 'id'>) {
+
+    servers.push({
+      id: crypto.randomUUID(),
+      ...server,
+    })
     await writeServersDataFile(servers)
   }
 

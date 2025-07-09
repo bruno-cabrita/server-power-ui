@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import { IconReload } from '@tabler/icons-vue'
+import { useRouter } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
+import { useLayoutStore } from '../store.ts'
 import { ServerCreateInputSchema } from '../schemas.ts'
 import type { ServerCreateInput } from '../types.ts'
+
+const router = useRouter()
+const layout = useLayoutStore()
+const isLoading = ref(false)
 
 const form = reactive<ServerCreateInput>({
   name: '',
@@ -19,7 +26,26 @@ const isFormValid = computed(() => {
 })
 
 async function submitHandler() {
-  console.log(`submirHandler():`, form)
+  isLoading.value = true
+
+  const res = await fetch('/api/server/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(form),
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err)
+      layout.showDangerAlert(err.message)
+    })
+  
+  isLoading.value = false
+  if(res.success) {
+    layout.showSuccessAlert(`Server ${form.name} was created.`)
+    router.push({ name: 'home' })
+  } else {
+    layout.showDangerAlert(`Error ocurred when creating server.`)
+  }
 }
 </script>
 <template>
@@ -85,7 +111,10 @@ async function submitHandler() {
           class="rounded-lg py-1 px-2 bg-gray-950 border-2 border-gray-600 text-gray-400"
         />
         <div class="col-span-2 flex flex-row justify-center mt-4">
-          <Button @click="submitHandler" :disabled="!isFormValid">Submit</Button>
+          <Button @click="submitHandler" :disabled="!isFormValid">
+            <IconReload :size="20" v-if="isLoading" class="animate-spin"/>
+            <span v-else>Add Server</span>
+          </Button>
         </div>
       </main>
     </main>
