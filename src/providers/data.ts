@@ -10,7 +10,7 @@ async function useData() {
 
   await ensureFile(dataFilePath)
 
-  let fileText = await readTextFile(dataFilePath);
+  let fileText = await readTextFile(dataFilePath)
 
   try {
     JSON.parse(fileText)
