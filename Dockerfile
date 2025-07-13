@@ -1,4 +1,4 @@
-FROM denoland/deno:debian-2.4.0 AS base
+FROM denoland/deno:debian-2.4.1 AS base
 WORKDIR /app
 EXPOSE 4000
 

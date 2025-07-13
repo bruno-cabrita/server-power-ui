@@ -1,3 +1,4 @@
+/// <reference lib="deno.ns" />
 import app from './server.ts'
 
 console.log(`Server is running on http://localhost:4000`)
