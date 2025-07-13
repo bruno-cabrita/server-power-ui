@@ -1,6 +1,14 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import type { Alert, ServerList } from './types.ts'
+import { orpc } from './providers/orpc.ts'
+import type {
+  Alert,
+  ServerList,
+  // ServerUpdateInput,
+  ServerUpdate,
+  ServerRead,
+  ServerCreateInput,
+} from './types.ts'
 
 export const useLayoutStore = defineStore('layout', () => {
 
@@ -34,25 +42,57 @@ export const useLayoutStore = defineStore('layout', () => {
 
 export const useServersStore = defineStore('servers', () => {
 
-  const servers = reactive<ServerList>(
-    JSON.parse(localStorage.getItem('servers') || '{"servers":[]}').servers
-  )
+  const servers = reactive<ServerList>([])
 
-  async function fetchServers(): Promise<ServerList> {
-    const data = await fetch('/api/server/list')
-      .then((res) => res.json())
-    
+  async function list() {
+    const res = await orpc.servers.list()
+
+    if(!res) return []
+
     servers.length = 0
-    servers.push(...data)
+    Object.assign(servers, res)
 
-    localStorage.setItem('servers', JSON.stringify({servers: data}))
+    return res
+  }
 
-    return data
+  async function read(id: string): Promise<ServerRead | undefined> {
+    const res = await orpc.servers.read({ id })
+
+    return !res ? undefined : res
+  }
+
+  async function update(payload: ServerUpdate): Promise<boolean> {
+    const res = await orpc.servers.update(payload)
+
+    if(!res) return false
+
+    return res
+  }
+
+  async function create(payload: ServerCreateInput): Promise<boolean> {
+    const res = await orpc.servers.create(payload)
+
+    if(!res) return false
+
+    return res
+  }
+
+  async function poweron(id: string): Promise<boolean> {
+    return await orpc.servers.poweron({id})
+  }
+
+  async function poweroff(id: string): Promise<boolean> {
+    return await orpc.servers.poweroff({id})
   }
 
   return {
     servers,
-    fetch: fetchServers,
+    list,
+    read,
+    update,
+    create,
+    poweron,
+    poweroff,
   }
 }, {
   persist: true

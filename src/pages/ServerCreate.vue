@@ -4,12 +4,16 @@ import { IconReload } from '@tabler/icons-vue'
 import { useRouter } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
-import { useLayoutStore } from '../store.ts'
+import {
+  useLayoutStore,
+  useServersStore,
+} from '../store.ts'
 import { ServerCreateInputSchema } from '../schemas.ts'
 import type { ServerCreateInput } from '../types.ts'
 
 const router = useRouter()
 const layout = useLayoutStore()
+const servers = useServersStore()
 const isLoading = ref(false)
 
 const form = reactive<ServerCreateInput>({
@@ -27,25 +31,13 @@ const isFormValid = computed(() => {
 
 async function submitHandler() {
   isLoading.value = true
-
-  const res = await fetch('/api/server/create', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
-  })
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error(err)
-      layout.showDangerAlert(err.message)
-    })
-  
+  const res = await servers.create(form)
   isLoading.value = false
-  if(res.success) {
-    layout.showSuccessAlert(`Server ${form.name} was created.`)
-    router.push({ name: 'home' })
-  } else {
-    layout.showDangerAlert(`Error ocurred when creating server.`)
-  }
+
+  if(!res) return layout.showDangerAlert(`Error ocurred when creating server.`)
+
+  layout.showSuccessAlert(`Server ${form.name} was created.`)
+  router.push({ name: 'home' })
 }
 </script>
 <template>

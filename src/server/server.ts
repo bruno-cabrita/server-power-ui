@@ -2,7 +2,7 @@ import { readTextFile } from 'fs/unstable-read-text-file'
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/deno'
 // import { secureHeaders } from 'hono/secure-headers'
-import api from './api/index.ts'
+import api from './api.ts'
 
 const distPath = './dist'
 const rootDistPath = `${import.meta.dirname}/../${distPath}`

@@ -4,18 +4,24 @@ import { IconReload } from '@tabler/icons-vue'
 import { useRouter, useRoute } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
-import { useLayoutStore } from '../store.ts'
+import {
+  useLayoutStore,
+  useServersStore,
+} from '../store.ts'
 import { ServerUpdateInputSchema } from '../schemas.ts'
 import type { ServerUpdateInput } from '../types.ts'
 
 const route = useRoute()
 const router = useRouter()
 const layout = useLayoutStore()
+const servers = useServersStore()
+
 const isLoading = ref(false)
 
 const id = route.params.id as string
 
 const form = reactive<ServerUpdateInput>({
+  id,
   name: '',
   mac: '',
   ip: '',
@@ -23,46 +29,26 @@ const form = reactive<ServerUpdateInput>({
 })
 
 const isFormValid = computed(() => {
-  const { success } = ServerUpdateInputSchema.safeParse({...form})
+  const { success } = ServerUpdateInputSchema.safeParse(form)
   return success
 })
 
 async function submitHandler() {
   isLoading.value = true
-
-  const res = await fetch(`/api/server/${id}/update`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(form),
-  })
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error(err)
-      layout.showDangerAlert(err.message)
-    })
-  
+  const res = await servers.update(form)  
   isLoading.value = false
-  if(res.success) {
-    layout.showSuccessAlert(`Server ${form.name} was updated.`)
-    router.push({ name: 'home' })
-  } else {
-    layout.showDangerAlert(`Error ocurred when creating server.`)
-  }
+
+  if(!res) return layout.showDangerAlert(`Error ocurred when updating server.`)
+
+  layout.showSuccessAlert(`Server ${form.name} was updated.`)
+  router.push({ name: 'home' })
 }
 
 async function fetchData() {
   isLoading.value = true
-
-  const res = await fetch(`/api/server/${id}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error(err)
-      layout.showDangerAlert(err.message)
-    })
-  
-  isLoading.value = false
-
+  const res = await servers.read(id)
   Object.assign(form, res)
+  isLoading.value = false
 }
 
 onBeforeMount(fetchData)

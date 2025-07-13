@@ -2,29 +2,18 @@
 import { ref, onBeforeMount } from 'vue'
 import { IconReload } from '@tabler/icons-vue'
 import type { ServerList } from '../types.ts'
-import {
-  useLayoutStore,
-  useServersStore,
-} from '../store.ts'
+import { useServersStore } from '../store.ts'
 import MainLayout from '../layouts/MainLayout.vue'
 import Button from '../components/Button.vue'
 import ServerCard from '../components/ServerCard.vue'
 
-const layout = useLayoutStore()
 const servers = useServersStore()
 const isLoading = ref(true)
 
 async function refreshHandler() {
   isLoading.value = true
-
-  await servers.fetch()
-    .catch((err) => {
-      console.error(err)
-      layout.showDangerAlert(err.message)
-    })
-
+  await servers.list()
   isLoading.value = false
-
 }
 
 onBeforeMount(refreshHandler)

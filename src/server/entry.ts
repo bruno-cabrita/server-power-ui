@@ -1,4 +1,4 @@
-import app from './index.ts'
+import app from './server.ts'
 
 console.log(`Server is running on http://localhost:4000`)
 

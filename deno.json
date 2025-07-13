@@ -1,34 +1,42 @@
 {
   "tasks": {
     "install": "deno install --allow-scripts=npm:@tailwindcss/oxide",
-    "dev": "deno run -A --unstable-net --watch src/server.ts & deno run -A npm:vite --host",
+    "dev": "deno run -A --unstable-net --watch src/server/entry.ts & deno run -A npm:vite --host",
     "build": "deno run -A npm:vite build",
-    "serve": "deno run -NRWE --unstable-net --allow-run src/server.ts",
-    "preview": "deno task build && deno task serve"
+    "serve": "deno run -NRWE --unstable-net --allow-run src/server/entry.ts",
+    "preview": "deno run build && deno run serve"
   },
   "compilerOptions": {
     "lib": ["ES2020", "DOM", "DOM.Iterable"]
   },
   "imports": {
-    "pinia": "npm:pinia@^3.0.3",
-    "pinia-plugin-persistedstate": "npm:pinia-plugin-persistedstate@^4.4.1",
-    "wol": "jsr:@bukhalo/wol@^2.0.1",
-    "dax": "jsr:@david/dax@^0.43.2",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
-    "fs": "jsr:@std/fs@^1.0.19",
+    "@orpc/client": "npm:@orpc/client@^1.6.8",
+    "@orpc/server": "npm:@orpc/server@^1.6.8",
     "@tabler/icons-vue": "npm:@tabler/icons-vue@^3.34.0",
     "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.11",
     "@vitejs/plugin-vue": "npm:@vitejs/plugin-vue@^6.0.0",
+    "dax": "jsr:@david/dax@^0.43.2",
+    "fs": "jsr:@std/fs@^1.0.19",
     "hono": "npm:hono@^4.8.4",
+    "lowdb": "npm:lowdb@^7.0.1",
+    "pinia": "npm:pinia@^3.0.3",
+    "pinia-plugin-persistedstate": "npm:pinia-plugin-persistedstate@^4.4.1",
     "tailwindcss": "npm:tailwindcss@^4.1.11",
-    "vite": "npm:vite@^7.0.2",
+    "vite": "npm:vite@^7.0.4",
     "vue": "npm:vue@^3.5.17",
     "vue-router": "npm:vue-router@^4.5.1",
-    "zod": "npm:zod@^3.25.74"
+    "wol": "jsr:@bukhalo/wol@^2.0.1",
+    "zod": "npm:zod@^4.0.5"
   },
   "fmt": {
     "singleQuote": true,
     "semiColons": false
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-unused-vars"]
+    }
   },
   "nodeModulesDir": "auto"
 }

@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { IconReload } from '@tabler/icons-vue'
-import { useLayoutStore } from '../store.ts'
+import {
+  useLayoutStore,
+  useServersStore,
+} from '../store.ts'
 import type { ServerList } from '../types.ts'
 import Button from '../components/Button.vue'
 
@@ -10,40 +13,23 @@ const props = defineProps<{
 }>()
 
 const layout = useLayoutStore()
+const servers = useServersStore()
 const isLoading = ref(false)
 
 async function powerOnHandler() {
   isLoading.value = true
-  fetch(`/api/server/${props.server.id}/poweron`)
-    .then((res) => res.json())
-    .then(({ success }) => {
-      if(success)
-        layout.showSuccessAlert(`${props.server.name} was powered on. Wait a few minutes before refresh the page to confirm.`)
-    })
-    .catch((err) => {
-      console.error(err)
-      layout.showDangerAlert(err.message)
-    })
-    .finally(() => {
-      isLoading.value = false
-    })
+  const res = await servers.poweron(props.server.id)
+  isLoading.value = false
+  if(!res) return layout.showDangerAlert('Error powering on server.')
+  layout.showSuccessAlert(`${props.server.name} was powered on. Wait a few minutes before refresh the page to confirm.`)
 }
 
 async function powerOffHandler() {
   isLoading.value = true
-  fetch(`/api/server/${props.server.id}/poweroff`)
-    .then((res) => res.json())
-    .then(({ success }) => {
-      if(success)
-        layout.showSuccessAlert(`${props.server.name} was powered off. Wait a few minutes before refresh the page to confirm.`)
-    })
-    .catch((err) => {
-      console.error(err)
-      layout.showDangerAlert(err.message)
-    })
-    .finally(() => {
-      isLoading.value = false
-    })
+  const res = await servers.poweroff(props.server.id)
+  isLoading.value = false
+  if(!res) return layout.showDangerAlert('Error powering off server.')
+  layout.showSuccessAlert(`${props.server.name} was powered off. Wait a few minutes before refresh the page to confirm.`)
 }
 </script>
 <template>
