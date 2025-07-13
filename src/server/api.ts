@@ -2,7 +2,6 @@ import * as z from 'zod/mini'
 import { os } from '@orpc/server'
 import { RPCHandler } from '@orpc/server/fetch'
 import { Hono } from 'hono'
-// import { cors } from 'hono/cors'
 import { useDB } from './db.ts'
 import { useCommands } from './commands.ts'
 import {
@@ -99,8 +98,6 @@ export const router = {
 const handler = new RPCHandler(router)
 
 const api = new Hono()
-
-// api.use(cors())
 
 api.use('/*', async (c, next) => {
   const { matched, response } = await handler.handle(
