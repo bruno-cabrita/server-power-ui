@@ -13,6 +13,4 @@ COPY --from=install /app/node_modules .
 COPY . .
 RUN deno task build
 
-FROM build AS app
-
-ENTRYPOINT [ "deno", "task", "serve" ]
+ENTRYPOINT [ "deno", "run", "serve" ]
